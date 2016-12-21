@@ -3,6 +3,7 @@ import Component from 'inferno-component'
 import { connect } from 'inferno-mobx'
 import TodoAdd from '../components/todos/TodoAdd'
 import TodoItem from '../components/todos/TodoItem'
+import {toJS} from "mobx";
 
 @connect(['todos'])
 class Todos extends Component {
@@ -16,6 +17,9 @@ class Todos extends Component {
     render({ todos }) {
         return <main>
             <h1>todos</h1>
+            <pre className="home">
+                {JSON.stringify(toJS(todos.todosStuff), null, 2)}
+            </pre>
             <div className="home">
                 <TodoAdd/>
                 <section className="main">

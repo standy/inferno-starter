@@ -1,4 +1,4 @@
-import { extendObservable, asFlat } from 'mobx'
+import { extendObservable, asFlat, action} from 'mobx'
 
 /**
  * @class Todos
@@ -10,6 +10,7 @@ export default class Todos {
         this.items = []
         extendObservable(this, {
             loading: false,
+            todosStuff: `Initial state (should not appear)`,
             items: []
         }, state)
     }
@@ -38,8 +39,17 @@ export default class Todos {
     }
 
     browse() {
-        return this.request(`api/todos`).then(items => {
-            this.items = items
-        })
+        return this.request(`api/todos`)
+            /* Adding 1s delay to request response */
+            .then(x => new Promise(resolve => setTimeout(resolve, 1000, x)))
+            .then(action(items => {
+                this.items = items
+
+                /* Adding some sort of data */
+                this.todosStuff = {
+                    todosTitle: `Some Todos Title`,
+                    dynamicData: Math.random()
+                }
+            }))
     }
 }
